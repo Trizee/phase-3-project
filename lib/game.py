@@ -3,6 +3,7 @@ import pygame
 from sys import exit
 
 # pygame init
+
 def display_score():
     current_time = int(pygame.time.get_ticks() / 1000) - start_time
     score_surf = test_font.render(f'Score: {current_time}', False, (64,64,64))
@@ -16,6 +17,7 @@ clock = pygame.time.Clock()
 test_font = pygame.font.Font('lib/font/Pixeltype.ttf', 50)
 game_active = False
 start_time = 0
+
 
 sky_surf = pygame.image.load('lib/graphics/Sky.png').convert()
 ground_surf = pygame.image.load('lib/graphics/ground.png').convert()
@@ -84,11 +86,17 @@ while True:
         if player_rect.bottom >= 300: player_rect.bottom = 300
         screen.blit(player_surf,player_rect)
 
+        final_score = 0 + int(pygame.time.get_ticks() / 1000)
+        
+
         # collision
         if player_rect.colliderect(snail_rect):
             game_active = False
+            game_message = test_font.render(f'Final Score: {final_score}',False,(111,196,169))
+            final_score = 0
 
         display_score()
+
 
     else:
         screen.fill((94,129,162))
