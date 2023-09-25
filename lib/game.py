@@ -86,7 +86,8 @@ while True:
         if player_rect.bottom >= 300: player_rect.bottom = 300
         screen.blit(player_surf,player_rect)
 
-        final_score = 0 + int(pygame.time.get_ticks() / 1000)
+        final_score = 0
+        final_score = final_score + int(pygame.time.get_ticks() / 1000)
         
 
         # collision

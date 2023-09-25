@@ -9,7 +9,7 @@ faker = "*"
 pytest = "7.1.3"
 pygame = '*'
 inquirer = '*'
-SQLAlchemy = '*'
+SQLalchemy = '*'
 
 [dev-packages]
 
