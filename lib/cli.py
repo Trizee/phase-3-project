@@ -53,7 +53,7 @@ if __name__ == '__main__':
         main_menu = [
         inquirer.List('option',
                         message="Options",
-                        choices=['Play','View High Scores','View Players','Update Players','Exit'],
+                        choices=['Play','View High Scores','View Players','Update Players','Delete a Player','Exit'],
                     ),
         ]
         main_menu_answers = inquirer.prompt(main_menu)
@@ -66,6 +66,8 @@ if __name__ == '__main__':
             update_players()
         elif main_menu_answers_key == 'View High Scores':
             highscore()
+        elif main_menu_answers_key == 'Delete a Player':
+            delete_player()
 
     def player_menu():
         players = session.query(Players).all()
@@ -161,7 +163,6 @@ if __name__ == '__main__':
         print_game_over()
         main_menu()
 
-
     def update_players():
         players = session.query(Players).all()
         question = [
@@ -172,6 +173,27 @@ if __name__ == '__main__':
         ]
         answer = inquirer.prompt(question)
         answer_key = answer['update']
+        main_menu()
+
+    def delete_player():
+        players = session.query(Players).all()
+        question = [
+            inquirer.List('delete',
+                        message="Select a Player to Delete",
+                        choices=[player for player in players],
+            ),
+            inquirer.List('confirm',
+                          message='Are You Sure Changes Will be Permanent',
+                          choices= ['Yes', 'No']
+                          )
+        ]
+        answer = inquirer.prompt(question)
+        if answer['confirm'] == 'No':
+            print('Phew, Please Play Again!')
+        if answer['confirm'] == 'Yes':
+            session.delete(answer['delete'])
+            session.commit()        
+        print(answer)
         main_menu()
 
     def print_game_over():
