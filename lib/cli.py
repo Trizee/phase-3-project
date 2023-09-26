@@ -199,7 +199,15 @@ if __name__ == '__main__':
                 session.commit()
        
         elif answer_criteria == 'Description':
-            print(answer_player.description)
+            questions = [
+                inquirer.Text('des', message=f' Old Description: {answer_player.description} /// New Description'),
+                ]
+            answers_des = inquirer.prompt(questions)
+            if answers_des['des'] == answer_player.description:
+                print('Description Must Be New')
+            else:
+                answer_player.description = answers_des['des']
+                session.commit()
         
         main_menu()
 
