@@ -16,10 +16,6 @@ class Players(Base):
     description = Column('description',String())
     scores = relationship('Scores', backref=backref('players'), cascade='all, delete-orphan')
 
-    def __init__(self,name,description):
-        self.name = name
-        self.description = description
-
     def __repr__(self):
         return f'Player: {self.name}'
     
@@ -30,10 +26,6 @@ class Scores(Base):
     id = Column(Integer(),primary_key=True)
     player = Column(Integer(),ForeignKey('players.id'))
     score = Column('score', Integer())
-
-    def __init__(self,player,score):
-        self.player = player
-        self.score = score
 
     def __repr__(self):
         return f'{self.score}'
@@ -142,7 +134,6 @@ if __name__ == '__main__':
             ]
             answer = inquirer.prompt(question)
             times_played = [score.score for score in all_scores if answer['update'].id == score.player]
-
             des = answer['update'].description
             print(f'''{answer['update']}
 Player Description: {des}
