@@ -105,7 +105,6 @@ if __name__ == '__main__':
         players = session.query(Players).all()
         all_scores = session.query(Scores).all()
         all_score_scores = [(score.score,score.players.name) for score in all_scores]
-        print(all_score_scores)
         sortedlist = sorted(all_score_scores)
         if not players:
                 print('Sorry No Exsisting Users')
@@ -247,5 +246,13 @@ Highest Score: {max(times_played)}
        ▀                              ▐                  
               ''')
 
+    print(r'''
+ _____        _                                
+/__   \ _ __ (_)  __ _   __ _  _ __ ___    ___ 
+  / /\/| '__|| | / _` | / _` || '_ ` _ \  / _ \
+ / /   | |   | || (_| || (_| || | | | | ||  __/
+ \/    |_|   |_| \__, | \__,_||_| |_| |_| \___|
+                 |___/                         
+''')
     main_menu()
 
