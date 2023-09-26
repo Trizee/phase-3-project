@@ -68,6 +68,7 @@ if __name__ == '__main__':
             highscore()
 
     def player_menu():
+        players = session.query(Players).all()
         play_menu = [
             inquirer.List('new',
                 message="Are you a new or returning player?",
@@ -104,6 +105,7 @@ if __name__ == '__main__':
             session.add(new_player)
             session.commit()
             game()
+            print_game_over()
             main_menu()
             
     def highscore():
@@ -113,15 +115,13 @@ if __name__ == '__main__':
         else:
             print(r"""
 
-                                        ._ o o
-                                        \_`-)|_
-                                        ,""       \ 
-                                    ,"  ## |   ಠ ಠ. 
-                                    ," ##   ,-\__    `.
-                                ,"       /     `--._;)
-                                ,"     ## /
-                            ,"   ##    /
-
+██   ██ ██  ██████  ██   ██     ███████  ██████  ██████  ██████  ███████ ███████ 
+██   ██ ██ ██       ██   ██     ██      ██      ██    ██ ██   ██ ██      ██      
+███████ ██ ██   ███ ███████     ███████ ██      ██    ██ ██████  █████   ███████ 
+██   ██ ██ ██    ██ ██   ██          ██ ██      ██    ██ ██   ██ ██           ██ 
+██   ██ ██  ██████  ██   ██     ███████  ██████  ██████  ██   ██ ███████ ███████ 
+                                                                                 
+                                                                                 
 
                         """)
         main_menu()
@@ -158,7 +158,9 @@ if __name__ == '__main__':
         )
         session.add(new_score)
         session.commit()
+        print_game_over()
         main_menu()
+
 
     def update_players():
         players = session.query(Players).all()
@@ -171,6 +173,18 @@ if __name__ == '__main__':
         answer = inquirer.prompt(question)
         answer_key = answer['update']
         main_menu()
+
+    def print_game_over():
+        print(f'''
+           
+  ▄▀  ██   █▀▄▀█ ▄███▄       ████▄     ▄   ▄███▄   █▄▄▄▄ 
+▄▀    █ █  █ █ █ █▀   ▀      █   █      █  █▀   ▀  █  ▄▀ 
+█ ▀▄  █▄▄█ █ ▄ █ ██▄▄        █   █ █     █ ██▄▄    █▀▀▌  
+█   █ █  █ █   █ █▄   ▄▀     ▀████  █    █ █▄   ▄▀ █  █  
+ ███     █    █  ▀███▀               █  █  ▀███▀     █   
+        █    ▀                        █▐            ▀    
+       ▀                              ▐                  
+              ''')
 
     main_menu()
 
