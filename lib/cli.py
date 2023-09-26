@@ -3,7 +3,7 @@ from game import game
 from sqlalchemy import (create_engine, desc,
     Index, Column, DateTime, Integer, String, ForeignKey,)
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import (sessionmaker, relationship, )
+from sqlalchemy.orm import (sessionmaker, relationship, backref)
 
 Base = declarative_base()
 
@@ -14,7 +14,7 @@ class Players(Base):
     id =Column(Integer(),primary_key=True)
     name = Column('name',String())
     description = Column('description',String())
-    scores = relationship('Scores', backref='players')
+    scores = relationship('Scores', backref=backref('players'), cascade='all, delete-orphan')
 
     def __init__(self,name,description):
         self.name = name
@@ -144,7 +144,7 @@ if __name__ == '__main__':
             times_played = [score.score for score in all_scores if answer['update'].id == score.player]
 
             des = answer['update'].description
-            print(f'''Player: {answer['update']}
+            print(f'''{answer['update']}
 Player Description: {des}
 Times Played: {len(times_played)}
 Highest Score: {max(times_played)}
