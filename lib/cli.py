@@ -141,10 +141,13 @@ if __name__ == '__main__':
                 ),
             ]
             answer = inquirer.prompt(question)
-            times_played = [score for score in all_scores if answer['update'].id == score.player]
+            times_played = [score.score for score in all_scores if answer['update'].id == score.player]
+
             des = answer['update'].description
-            print(f'''Player Description: {des}
+            print(f'''Player: {answer['update']}
+Player Description: {des}
 Times Played: {len(times_played)}
+Highest Score: {max(times_played)}
  ''')
             main_menu()
             # add methods to see all of number of of games a player played / highest score
