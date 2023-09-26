@@ -1,4 +1,3 @@
-import os
 import inquirer
 from game import game
 from sqlalchemy import (create_engine, desc,
@@ -47,7 +46,7 @@ if __name__ == '__main__':
 
     # # defining table varibles
     # players = session.query(Players).all()
-    # player_names = session.query(Players.name).all()
+    # player_names = session.query(Players.name).all()  
 
     def main_menu():
         main_menu = [
@@ -130,6 +129,7 @@ if __name__ == '__main__':
 
     def view_players():
         players = session.query(Players).all()
+        all_scores = session.query(Scores).all()
         if not players:
                 print('Sorry No Exsisting Users')
                 main_menu()
@@ -141,8 +141,11 @@ if __name__ == '__main__':
                 ),
             ]
             answer = inquirer.prompt(question)
+            times_played = [score for score in all_scores if answer['update'].id == score.player]
             des = answer['update'].description
-            print(f'Player Description: {des}')
+            print(f'''Player Description: {des}
+Times Played: {len(times_played)}
+ ''')
             main_menu()
             # add methods to see all of number of of games a player played / highest score
 
