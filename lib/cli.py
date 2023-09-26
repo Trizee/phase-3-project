@@ -1,10 +1,10 @@
-import re 
+import os
 import inquirer
 from game import game
 from sqlalchemy import (create_engine, desc,
-    Index, Column, DateTime, Integer, String, ForeignKey)
+    Index, Column, DateTime, Integer, String, ForeignKey,)
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker, relationship, backref
+from sqlalchemy.orm import (sessionmaker, relationship, )
 
 Base = declarative_base()
 
@@ -40,14 +40,14 @@ class Scores(Base):
         return f'{self.score}'
     
 if __name__ == '__main__':
-    engine = create_engine('sqlite:///players.db')
+    engine = create_engine('sqlite:///database.db')
     Base.metadata.create_all(engine)
     Session = sessionmaker(bind=engine)
     session = Session()
 
-    # defining table varibles
-    players = session.query(Players).all()
-    player_names = session.query(Players.name).all()
+    # # defining table varibles
+    # players = session.query(Players).all()
+    # player_names = session.query(Players.name).all()
 
     def main_menu():
         main_menu = [
@@ -59,15 +59,15 @@ if __name__ == '__main__':
         main_menu_answers = inquirer.prompt(main_menu)
         main_menu_answers_key = main_menu_answers['option']
         if main_menu_answers_key == 'Play':
-            play_menu()
+            player_menu()
         elif main_menu_answers_key == 'View Players':
             view_players()
         elif main_menu_answers_key == 'Update Players':
             update_players()
         elif main_menu_answers_key == 'View High Scores':
             highscore()
-        
-    def play_menu():
+
+    def player_menu():
         play_menu = [
             inquirer.List('new',
                 message="Are you a new or returning player?",
@@ -79,10 +79,15 @@ if __name__ == '__main__':
         if play_menu_answer_key == 'New':
             create_new_player()
         if play_menu_answer_key == 'Exisiting':
-            returning_player()
+            if not players:
+                print('Sorry No Exsisting Users')
+                player_menu()
+            else:    
+                returning_player()
 
     # Children for the play menu
     def create_new_player():
+        player_names = session.query(Players.name).all()
         question = [
             inquirer.Text('name', message='Enter Your Name'),
             inquirer.Text('des', message='Give a Description'),
@@ -102,32 +107,42 @@ if __name__ == '__main__':
             main_menu()
             
     def highscore():
-        print(r"""
+        players = session.query(Players).all()
+        if not players:
+                print('Sorry No Exsisting Users')
+        else:
+            print(r"""
 
-                                       ._ o o
-                                       \_`-)|_
-                                    ,""       \ 
-                                  ,"  ## |   ಠ ಠ. 
-                                ," ##   ,-\__    `.
-                              ,"       /     `--._;)
-                            ,"     ## /
-                          ,"   ##    /
+                                        ._ o o
+                                        \_`-)|_
+                                        ,""       \ 
+                                    ,"  ## |   ಠ ಠ. 
+                                    ," ##   ,-\__    `.
+                                ,"       /     `--._;)
+                                ,"     ## /
+                            ,"   ##    /
 
 
-                    """)
+                        """)
         main_menu()
 
     def view_players():
-        question = [
-            inquirer.List('update',
-                        message="Select Player to View",
-                        choices=[player for player in players],
-            ),
-        ]
-        answer = inquirer.prompt(question)
-        print(answer['update'].id)
+        players = session.query(Players).all()
+        if not players:
+                print('Sorry No Exsisting Users')
+                main_menu()
+        else:
+            question = [
+                inquirer.List('update',
+                            message="Select Player to View",
+                            choices=[player for player in players],
+                ),
+            ]
+            answer = inquirer.prompt(question)
+            print(answer['update'].id)
 
     def returning_player():
+        players = session.query(Players).all()
         question = [
             inquirer.List('update',
                         message="Select an Exsisting Player",
@@ -137,9 +152,16 @@ if __name__ == '__main__':
         answer = inquirer.prompt(question)
         answer_key = answer['update']
         game()
+        new_score = Scores(
+            player= answer_key.id,
+            score= 10
+        )
+        session.add(new_score)
+        session.commit()
         main_menu()
 
     def update_players():
+        players = session.query(Players).all()
         question = [
             inquirer.List('update',
                         message="Select a Player to Update",
