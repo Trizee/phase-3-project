@@ -141,7 +141,10 @@ if __name__ == '__main__':
                 ),
             ]
             answer = inquirer.prompt(question)
-            print(answer['update'].id)
+            des = answer['update'].description
+            print(f'Player Description: {des}')
+            main_menu()
+            # add methods to see all of number of of games a player played / highest score
 
     def returning_player():
         players = session.query(Players).all()
@@ -165,14 +168,39 @@ if __name__ == '__main__':
 
     def update_players():
         players = session.query(Players).all()
+        player_names = session.query(Players.name).all()
         question = [
             inquirer.List('update',
                         message="Select a Player to Update",
                         choices=[player for player in players],
             ),
+            inquirer.List('criteria',
+                          message='What Do You Want To Update',
+                          choices=['Name','Description','Nevermind']
+            )
         ]
         answer = inquirer.prompt(question)
-        answer_key = answer['update']
+        answer_player = answer['update']
+        answer_criteria = answer['criteria']
+        
+        if answer_criteria == 'Name':
+            questions = [
+                inquirer.Text('name', message=f"Old Name: {answer_player.name} /// New Name"),
+                ]
+            answers_name = inquirer.prompt(questions)
+    
+            if answers_name['name'] == answer_player.name:
+                print('Name Must Be Different')
+
+            elif answers_name['name'] in [player[0] for player in player_names]:
+                print('Sorry This Name Is Already In Use')
+            else:
+                answer_player.name = answers_name['name']
+                session.commit()
+       
+        elif answer_criteria == 'Description':
+            print(answer_player.description)
+        
         main_menu()
 
     def delete_player():
@@ -193,7 +221,7 @@ if __name__ == '__main__':
         if answer['confirm'] == 'Yes':
             session.delete(answer['delete'])
             session.commit()        
-        print(answer)
+            print('Sorry To See You Go')
         main_menu()
 
     def print_game_over():
