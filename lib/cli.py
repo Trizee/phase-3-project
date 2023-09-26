@@ -103,18 +103,23 @@ if __name__ == '__main__':
             
     def highscore():
         players = session.query(Players).all()
+        all_scores = session.query(Scores).all()
+        all_score_scores = [score.score for score in all_scores]
+        sortedlist = sorted(all_score_scores)
         if not players:
                 print('Sorry No Exsisting Users')
         else:
-            print(r"""
+            print(f"""
 
 ██   ██ ██  ██████  ██   ██     ███████  ██████  ██████  ██████  ███████ ███████ 
 ██   ██ ██ ██       ██   ██     ██      ██      ██    ██ ██   ██ ██      ██      
 ███████ ██ ██   ███ ███████     ███████ ██      ██    ██ ██████  █████   ███████ 
 ██   ██ ██ ██    ██ ██   ██          ██ ██      ██    ██ ██   ██ ██           ██ 
 ██   ██ ██  ██████  ██   ██     ███████  ██████  ██████  ██   ██ ███████ ███████ 
-                                                                                 
-                                                                                 
+
+1) {sortedlist[0]}
+2) {sortedlist[1]}                                                                                 
+3) {sortedlist[2]}                                                                                 
 
                         """)
         main_menu()
