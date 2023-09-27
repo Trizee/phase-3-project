@@ -73,7 +73,7 @@ if __name__ == '__main__':
         play_menu = [
             inquirer.List('new',
                 message="Are you a new or returning player?",
-                choices=['New','Exisiting'],
+                choices=['New','Exisiting','Return To Main Menu'],
             ),
         ]
         play_menu_answer = inquirer.prompt(play_menu)
@@ -86,6 +86,8 @@ if __name__ == '__main__':
                 player_menu()
             else:    
                 returning_player()
+        if play_menu_answer_key == 'Return To Main Menu':
+            main_menu()
 
     # Children for the play menu
     def create_new_player():
