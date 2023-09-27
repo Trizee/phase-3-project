@@ -3,12 +3,17 @@ import pygame
 from sys import exit
 
 # pygame init
+global_score = 0 
+def return_score():
+    return global_score
+
 def game():
     def display_score():
         current_time = int(pygame.time.get_ticks() / 1000) - start_time
         score_surf = test_font.render(f'Score: {current_time}', False, (64,64,64))
         score_rect = score_surf.get_rect(center = (400,50))
         screen.blit(score_surf,score_rect)
+        return current_time
 
     pygame.init()
     screen = pygame.display.set_mode((800,400))
@@ -17,6 +22,7 @@ def game():
     test_font = pygame.font.Font('lib/font/Pixeltype.ttf', 50)
     game_active = False
     start_time = 0
+    score = 0
 
 
     sky_surf = pygame.image.load('lib/graphics/Sky.png').convert()
@@ -38,14 +44,19 @@ def game():
     game_name_rect = game_name.get_rect(center = (400,70))
 
     game_message = test_font.render('Press Space To Play',False,(111,196,169))
-    game_message_rect = game_message.get_rect(center = (400,340))
+    game_message_rect = game_message.get_rect(center = (400,330))
+
+    # timer
+    obstacle_timer = pygame.USEREVENT + 1
+    pygame.time.set_timer(obstacle_timer,900)
 
 
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-                return
+                return score
+                
             
             if game_active:
                 if event.type == pygame.KEYDOWN:
@@ -70,10 +81,6 @@ def game():
             screen.blit(sky_surf,(0,0))
             screen.blit(ground_surf,(0,300))
             
-            # pygame.draw.rect(screen, '#c0e8ec', score_rect,)
-            # pygame.draw.rect(screen, '#c0e8ec', score_rect,10)
-
-            # screen.blit(score_surf,score_rect)
 
             snail_rect.left -= 5
             if snail_rect.left < -50:
@@ -86,18 +93,15 @@ def game():
             if player_rect.bottom >= 300: player_rect.bottom = 300
             screen.blit(player_surf,player_rect)
 
-            final_score = 0
-            final_score = final_score + int(pygame.time.get_ticks() / 1000)
-            
-
             # collision
             if player_rect.colliderect(snail_rect):
                 game_active = False
-                game_message = test_font.render(f'Final Score: {final_score}',False,(111,196,169))
-                final_score = 0
-
-            display_score()
-
+                game_message = test_font.render(f'Final Score: {score}',False,(111,196,169))
+            
+            score = display_score()
+            global_score = score
+            # if event.type == obstacle_timer and game_active:
+            #     print('true') 
 
         else:
             screen.fill((94,129,162))
@@ -107,3 +111,4 @@ def game():
 
         pygame.display.update()
         clock.tick(60)
+

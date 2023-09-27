@@ -166,10 +166,10 @@ Highest Score: {max(times_played)}
         ]
         answer = inquirer.prompt(question)
         answer_key = answer['update']
-        game()
+        final_score = game()
         new_score = Scores(
             player= answer_key.id,
-            score= 10
+            score= final_score
         )
         session.add(new_score)
         session.commit()
