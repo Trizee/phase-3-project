@@ -105,15 +105,22 @@ if __name__ == '__main__':
         else:
             session.add(new_player)
             session.commit()
-            game()
+            player1 = session.query(Players).filter_by(name = new_player.name).first()
+            final_score = game()
+            new_score = Scores(
+                player= player1.id,
+                score= final_score
+            )
             print_game_over()
+            session.add(new_score)
+            session.commit()
             main_menu()
             
     def highscore():
         players = session.query(Players).all()
         all_scores = session.query(Scores).all()
         all_score_scores = [(score.score,score.players.name) for score in all_scores]
-        sortedlist = sorted(all_score_scores)
+        sortedlist = sorted(all_score_scores, key=lambda k: k[0], reverse=True)
         if not players:
                 print('Sorry No Exsisting Users')
         else:
