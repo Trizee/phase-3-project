@@ -2,6 +2,7 @@
 import pygame
 from sys import exit
 from random import randint
+from pygame import mixer
 
 # pygame init
 
@@ -45,7 +46,8 @@ def game():
     game_active = False
     start_time = 0
     score = 0
-
+    
+    # music
 
     sky_surf = pygame.image.load('lib/graphics/Sky.png').convert()
     ground_surf = pygame.image.load('lib/graphics/ground.png').convert()
@@ -84,6 +86,7 @@ def game():
 
     while True:
 
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -118,6 +121,10 @@ def game():
         #     print('key up')
         # putting surfaces on pygame dispaly
         if game_active:
+            
+            #Set preferred volume
+
+
             screen.blit(sky_surf,(0,0))
             screen.blit(ground_surf,(0,300))
             
