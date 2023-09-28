@@ -4,6 +4,7 @@ from sqlalchemy import (create_engine, desc,
     Index, Column, DateTime, Integer, String, ForeignKey,)
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import (sessionmaker, relationship, backref)
+import time
 
 Base = declarative_base()
 
@@ -41,6 +42,7 @@ if __name__ == '__main__':
     # player_names = session.query(Players.name).all()  
 
     def main_menu():
+        time.sleep(1)
         print(r'''
  _____        _                                
 /__   \ _ __ (_)  __ _   __ _  _ __ ___    ___ 
