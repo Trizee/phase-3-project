@@ -36,7 +36,7 @@ def game():
                 if player.colliderect(obstacle_rect):
                     return False
         return True
-
+    
     pygame.init()
     screen = pygame.display.set_mode((800,400))
     pygame.display.set_caption('Tri\'s Game')
@@ -55,7 +55,12 @@ def game():
 
     obstacle_rect_list = []
 
-    player_surf = pygame.image.load('lib/graphics/Player/player_walk_1.png').convert_alpha()
+    player_walk1 = pygame.image.load('lib/graphics/Player/player_walk_1.png').convert_alpha()
+    player_walk2 = pygame.image.load('lib/graphics/Player/player_walk_2.png').convert_alpha()
+    player_walk = [player_walk1,player_walk2]
+    player_index = 0
+    player_jump = pygame.image.load('lib/graphics/Player/jump.png').convert_alpha()
+    player_surf = player_walk[player_index]
     player_rect = player_surf.get_rect(midbottom = (80,300))
     player_gravity = 0
 
@@ -100,9 +105,15 @@ def game():
                         obstacle_rect_list.append(fly_surf.get_rect(midbottom = (randint(900,1100),175)))
         
             else:
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_SPACE:
-                        game_active = True
+                if score == 0:
+                    if event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_SPACE:
+                            game_active = True
+                else:
+                    if event.type == pygame.KEYDOWN:
+                        if event.key == pygame.K_SPACE:
+                            pygame.quit()
+                            return score
         # if event.type == pygame.KEYUP:
         #     print('key up')
         # putting surfaces on pygame dispaly
