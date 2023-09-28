@@ -30,6 +30,13 @@ def game():
             return obstacle_rect_list
         else: return []
 
+    def collisions(player,obstacles):
+        if obstacles:
+            for obstacle_rect in obstacles:
+                if player.colliderect(obstacle_rect):
+                    return False
+        return True
+
     pygame.init()
     screen = pygame.display.set_mode((800,400))
     pygame.display.set_caption('Tri\'s Game')
@@ -62,12 +69,16 @@ def game():
     game_message = test_font.render('Press Space To Play',False,(111,196,169))
     game_message_rect = game_message.get_rect(center = (400,340))
 
+    end_game_message = test_font.render('Thank You For Playing',False,(111,196,169))
+    end_game_message_rect = game_message.get_rect(center = (400,340))
+
     # timer
     obstacle_timer = pygame.USEREVENT + 1
     pygame.time.set_timer(obstacle_timer,1500)
 
 
     while True:
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -117,14 +128,20 @@ def game():
             # if player_rect.colliderect(snail_rect):
             #     pygame.quit()
             #     return score
-            
             score = display_score()
+
+            game_active = collisions(player_rect,obstacle_rect_list)
+            
+            
         
         else:
             screen.fill((94,129,162))
             screen.blit(player_stand,player_stand_rect)
             screen.blit(game_name,game_name_rect)
-            screen.blit(game_message,game_message_rect)
+            if score == 0:
+                screen.blit(game_message,game_message_rect)
+            else:
+                screen.blit(end_game_message,end_game_message_rect)
         # if event.type == obstacle_timer and game_active:
         #     print('true') 
         pygame.display.update()
